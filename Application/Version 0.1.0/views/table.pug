@@ -1,0 +1,26 @@
+doctype html
+html(lang='en')
+    head
+        meta(charset='UTF-8')
+        title=title
+        link(href='style.css' rel='stylesheet' type='text/css')
+        link(rel='stylesheet', href='/stylesheets/w3.css')
+    body
+        header
+            .container
+                a.back-main(href='/dbs' class="gg-arrow-left")
+                a.exit-account(href='/') Exit
+
+        - var i = 0;
+        table.w3-table-all
+            tr
+                for key in keys
+                    th #{key}
+
+            while i < data.length
+                tr
+                    for val in Object.values(data[i])
+                        td #{val}
+                - i++
+
+        footer

@@ -1,0 +1,40 @@
+doctype html
+html(lang='en')
+    head
+        meta(charset='UTF-8')
+        title Базы данных
+        link(href='style.css' rel='stylesheet' type='text/css')
+    body
+        header
+            .container
+                a.back-main(href='/main') Back
+                a.exit-account(href='/') Exit
+
+        div.dbs
+            div.db-left
+                h2(style="padding-left: 20px") БАЗЫ ДАННЫХ:
+                ul.db-variants
+                    li
+                        a(href='/clients') Клиенты
+                    li
+                        a(href='/scooters') Самокаты
+                    li
+                        a(href='/warehouses') Склады
+                    li
+                        a(href='/unloading_area') Площадки выгрузки
+                    li
+                        a(href='/trips') Поездки
+
+                h2(style="padding-left: 20px") АГРЕГИРОВАННЫЕ ДАННЫЕ:
+                form.agg-select(action='/aggregated', method='get')
+                    select#language(name='variant')
+                        option(value='0') Пользователи, которые больше всего ломают самокаты
+                        option(value='1') Пользователи, у которых давно не было поздок
+                        option(value='2') Самые далекие от складов самокаты
+                    br
+                    br
+                    button.agg-select-button Подтвердить
+
+            div.db-right
+
+        footer
