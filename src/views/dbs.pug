@@ -48,8 +48,8 @@ html(lang='en')
                         .checkboxes#checkboxes0
                             for i in scooters
                                 label
-                                    input(type='checkbox' name = "scooters" value = i.id )
-                                    | id #{i.id}
+                                    input(type='checkbox' name = "scooters" value = i.number )
+                                    | id #{i.number}
 
                     .multiselect
                         .selectBox(onclick='showCheckboxes(1)')
@@ -59,7 +59,7 @@ html(lang='en')
                         .checkboxes#checkboxes1
                             for i in users
                                 label
-                                    input(type='checkbox' name = "user" value = i.login)
+                                    input(type='checkbox' name = "users" value = i.login)
                                     | #{i.login}  (#{i.name})
 
                     .multiselect
@@ -70,8 +70,8 @@ html(lang='en')
                         .checkboxes#checkboxes2
                             for i in warehouses
                                 label
-                                    input(type='checkbox' name = "warehouses" value = i.id)
-                                    | id #{i.id}
+                                    input(type='checkbox' name = "warehouses" value = i.number)
+                                    | id #{i.number}
 
                     .multiselect
                         .selectBox(onclick='showCheckboxes(3)')
@@ -81,7 +81,7 @@ html(lang='en')
                         .checkboxes#checkboxes3
                             for i in unloading_area
                                 label
-                                    input(type='checkbox' name = "unloading_area" value = i.id)
+                                    input(type='checkbox' name = "unloading_areas" value = i.id)
                                     | #{i.id}  (#{i.address})
 
 
