@@ -206,3 +206,10 @@ select:focus{
     bottom: -1px;
     background: currentColor
 }
+
+.table-title{
+    background-color: rgba(255,255,255,0.7);
+    text-align: center;
+    margin: 0;
+    margin-top: 10px;
+}

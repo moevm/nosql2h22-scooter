@@ -5,17 +5,22 @@ html(lang='en')
         title=title
         link(href='style.css' rel='stylesheet' type='text/css')
         link(rel='stylesheet', href='/stylesheets/w3.css')
+        script(src='javascripts/sortTable.js')
     body
         header
             .container
                 a.back-main(href='/dbs' class="gg-arrow-left")
-                a.exit-account(href='/') Exit
+                a.exit-account(href='/exit') Exit
 
+        h2.table-title=title
         - var i = 0;
-        table.w3-table-all
+        - var index = 0
+        table.w3-table-all#myTable2
             tr
-                for key in keys
-                    th #{key}
+                while index < keys.length
+                    - console.log("index = ", index)
+                    th(onclick="sortTable(" + index + ")") #{keys[index]}
+                    - index++
 
             while i < data.length
                 tr
