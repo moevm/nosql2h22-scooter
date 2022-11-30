@@ -1,13 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-let logins = require('../public/users');
-let users = require('../public/users');
-let scooters = require('../public/scooters');
-let warehouses = require('../public/warehouses');
-let trips = require('../public/trips');
-let unloading_area = require('../public/unloading_area');
-
+let logins = require('../public/logins.json');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -16,18 +10,6 @@ router.get('/', function(req, res, next) {
 
 router.get('/main', (req, res) => {
   res.render('main_page', {title: "Main"})
-});
-
-router.get('/tariffs', (req, res) => {
-  res.render('tariffs', {title: 'Tarrifs'})
-});
-
-router.get('/rules', (req, res) => {
-  res.render('rules', {title: 'Rules'})
-});
-
-router.get('/dbs', (req, res) => {
-  res.render('dbs', {title: 'Data Bases'})
 });
 
 router.get('/enterLogin', (req, res) => {
@@ -56,37 +38,5 @@ router.get('/enterLogin', (req, res) => {
     }
   }
 })
-
-router.get('/aggregated', (req, res) => {
-  console.log(req.query);
-});
-
-router.get('/clients', (req, res) => {
-  //console.log(users)
-  let keys = Object.keys(users[0])
-  console.log(keys)
-  res.render('table', {title: 'Пользователи', keys: keys, data: users});
-  //отделить клиентов от админов? Нужно ли выводить пароли?
-});
-
-router.get('/scooters', (req, res) => {
-  let keys = Object.keys(scooters[0])
-  res.render('table', {title: 'Самокаты', keys: keys, data: scooters});
-});
-
-router.get('/warehouses', (req, res) => {
-  let keys = Object.keys(warehouses[0])
-  res.render('table', {title: 'Склады', keys: keys, data: warehouses});
-});
-
-router.get('/unloading_area', (req, res) => {
-  let keys = Object.keys(unloading_area[0])
-  res.render('table', {title: 'Площадки выгрузки', keys: keys, data: unloading_area});
-});
-
-router.get('/trips', (req, res) => {
-  let keys = Object.keys(trips[0])
-  res.render('table', {title: 'Площадки выгрузки', keys: keys, data: trips});
-});
 
 module.exports = router;
