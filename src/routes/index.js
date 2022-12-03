@@ -116,7 +116,7 @@ router.get('/dbs', async (req, res) => {
 });
 
 router.get('/enterLogin', async (req, res) => {
-  let user_type = 'no'
+  let user_type = ''
   let user_id = ''
   let logins = await getClients()
   //типа запрос к бд
@@ -313,14 +313,14 @@ async function attachedToUnloadingAreas(unloading_area){
       {number: unloading_area}
   )
   for (let i in result.records){
-    let warehouse = result.records[i].get(0).properties.number
+    let unloading_area = result.records[i].get(0).properties.number
 
     let relationship = result.records[i].get(1).type //HAS_NOW/TALKS_ABOUT/USED
 
     let attachedTo = result.records[i].get(2)
 
     let dict = {'unloading_area': unloading_area + '(unloading area)', 'relationship': relationship, 'attachedTo': attachedTo}
-    attachedToWarehouses.push(dict)
+    attachedToUnloadingAreas.push(dict)
   }
 
   return attachedToUnloadingAreas
@@ -389,9 +389,20 @@ router.get('/free-choice', async (req, res) => {
       }
     }
   }
-  let keys = 0
-  keys = ['node1', 'relationship','node2']
+  let keys = ['node1', 'relationship','node2']
   res.render('filter_table', {title: 'Фильтры', keys: keys, data: relationships})
 });
+
+router.get('/add_scooter', async (req, res) =>
+{
+  let warehouses = await getWarehouses();
+  res.render('add_scooter', {warehouses: warehouses})
+})
+
+router.get('/add_edit_scooter', (req, res) =>
+{
+  console.log(req.query)
+  res.redirect('/add_scooter')
+})
 
 module.exports = router;
