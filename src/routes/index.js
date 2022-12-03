@@ -73,7 +73,7 @@ async function getUnloadingAreas(){
 }
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res) {
   let cookies = req.cookies;
   if (!cookies.type) {
     res.render('login_page', {title: 'Login'});
@@ -92,7 +92,7 @@ router.get('/main', (req, res) => {
 });
 
 router.get('/tariffs', (req, res) => {
-  res.render('tariffs', {title: 'Tarrifs'})
+  res.render('tariffs', {title: 'Tariffs'})
 });
 
 router.get('/rules', (req, res) => {
@@ -118,23 +118,22 @@ router.get('/dbs', async (req, res) => {
 router.get('/enterLogin', async (req, res) => {
   let user_type = ''
   let user_id = ''
-  let logins = await getClients()
-  //типа запрос к бд
   let login = req.query.login;
   let password = req.query.password;
-  console.log(login, password)
-  for (let i in logins){
-    if (logins[i].login === login && logins[i].password === password){
-      user_type = logins[i].type;
-      user_id = logins[i].phone;
-      break;
-    }
+  let result = await session.run(
+      'match (user:USER {login: $login, password: $password})  \n' +
+      'return user',
+      {login: login, password: password}
+  )
+  if (result.records.length > 0)
+  {
+    result = result.records[0].get(0).properties
+    user_type = result.type;
+    user_id = result.phone;
+    res.cookie("type", user_type);
+    res.cookie("user id", user_id);
   }
-  //конец запроса
-
-  res.cookie("type", user_type);
-  res.cookie("user id", user_id);
-  console.log(user_type)
+  //console.log(user_type)
   if (user_type === 'admin' || user_type === 'user'){
     res.redirect('/main')
   } else {
