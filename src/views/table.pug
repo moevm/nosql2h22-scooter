@@ -3,7 +3,7 @@ html(lang='en')
     head
         meta(charset='UTF-8')
         title=title
-        link(href='style.css' rel='stylesheet' type='text/css')
+        link(href='/style.css' rel='stylesheet' type='text/css')
         link(rel='stylesheet', href='/stylesheets/w3.css')
         script(src='javascripts/sortTable.js')
     body
@@ -29,13 +29,14 @@ html(lang='en')
                                 td #{val}
                         - i++
 
+            - let stringKeys = ['name', 'password', 'login', 'type', 'phone', 'address']
             .dbFilter
                 h2.table-title Фильтры
                 p.dbTitle(hidden)=title
                 form.dbFilterForm(action="/filter/"+title, method='post')
-                    for key in Object.keys(data[0])
+                    for key in keys
                         h3=key+":"
-                        if typeof(data[0][key])==='object'
+                        if !stringKeys.includes(key)
                             .startEndDiv
                                 p ОТ
                                 input(type='number' name="start_"+key+"")

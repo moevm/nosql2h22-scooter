@@ -412,7 +412,20 @@ router.post('/filter/:title', async (req, res) =>
   switch (title)
   {
     case 'Пользователи':
-      res.redirect('/clients');
+      let result = await session.run(
+        'match (user:USER) \n' +
+        'WHERE user.name CONTAINS $name and user.password CONTAINS $password and user.login CONTAINS $login and ' +
+        'user.type CONTAINS $type and user.phone CONTAINS $phone\n' +
+        'return user',
+        {name: req.body.name, password: req.body.password, login: req.body.login, type: req.body.type, phone: req.body.phone}
+    );
+      let users = [];
+      for (let i in result.records)
+      {
+        users.push(result.records[i].get(0).properties)
+      }
+      let keys = ['name', 'password', 'login', 'type', 'phone'];
+      res.render('table', {title: title, keys: keys,data: users});
       break;
     case 'Самокаты':
       res.redirect('/scooters');
