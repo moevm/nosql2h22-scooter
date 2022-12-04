@@ -15,25 +15,25 @@ html(lang='en')
             form.w3-center(action='/add_edit_scooter', method='get')
                 .addScooterInputs
                     h3 №" самоката:
-                    input.addScooterInput#scooterNum(type='number', name='number', required='')
+                    input.addScooterInput#scooterNum(type='number', name='number', required)
                     h3 id склада:
                     //input.addScooterInput#scooterWarehouse(type='select', name='warehouse', required='')
                     select.addScooterSelect
                         for i in warehouses
                             option=i.houseNumber
                     h3 Производитель:
-                    input.addScooterInput#scooterManufactutre(type='text', name='manufacture', required='')
+                    input.addScooterInput#scooterManufactutre(type='text', name='manufacture')
                     h3 Год производства:
-                    input.addScooterInput#scooterYear(type='number', min=1900, max=2022, name='year', required='')
+                    input.addScooterInput#scooterYear(type='number', min=1900, max=2022, name='year')
                     h3 Максимальная емкость батареи:
-                    input.addScooterInput#scooterBattery(type='number', name='battery', required='')
+                    input.addScooterInput#scooterBattery(type='number', name='battery')
                     h3 Текущий пробег:
-                    input.addScooterInput#scooterMileage(type='number', min=0, name='mileage', required='')
+                    input.addScooterInput#scooterMileage(type='number', min=0, name='mileage')
                     h3 Лог тех. обслуживания:
-                    input.addScooterInput#scooterTechLog(type='text', name='techLog', required='')
+                    input.addScooterInput#scooterTechLog(type='text', name='techLog')
                     h3 Лог движения по складам:
-                    input.addScooterInput#scooterWarehouseLog(type='text', name='warehouseLog', required='')
+                    input.addScooterInput#scooterWarehouseLog(type='text', name='warehouseLog')
                 |
                 br
                 br
-                button#loginButton.w3-button.w3-gray(onclick='') Войти
+                button#loginButton.w3-button.w3-gray(onclick='') Подтвердить

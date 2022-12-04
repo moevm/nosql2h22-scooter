@@ -404,4 +404,30 @@ router.get('/add_edit_scooter', (req, res) =>
   res.redirect('/add_scooter')
 })
 
+router.post('/filter/:title', async (req, res) =>
+{
+  console.log(req.body)
+  let title = req.params.title
+  console.log("title = ", title)
+  switch (title)
+  {
+    case 'Пользователи':
+      res.redirect('/clients');
+      break;
+    case 'Самокаты':
+      res.redirect('/scooters');
+      break;
+    case 'Склады':
+      res.redirect('/warehouses');
+      break;
+    case 'Площадки выгрузки':
+      res.redirect('/unloading_area');
+      break;
+    case 'Поездки':
+      res.redirect('/trips');
+      break;
+  }
+
+})
+
 module.exports = router;

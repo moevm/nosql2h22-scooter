@@ -240,3 +240,35 @@ select:focus{
     margin-top: 10px;
     margin-left: 15px;
 }
+
+.dbContent {
+    height: 100%;
+    width: 100%;
+}
+
+.dbFilter {
+    height: 100%;
+    width: 100%;
+    background-color: rgba(109, 87, 117, 0.7);
+}
+
+.dbDiv {
+    display: grid;
+    grid-template-columns: auto 300px;
+}
+
+.startEndDiv {
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+    grid-template-rows: 30px;
+}
+
+.startEndDiv input{
+    width: 200px;
+    height: 20px;
+    margin-top: 15px;
+}
+
+.dbFilterForm {
+    margin-left: 10px;
+}

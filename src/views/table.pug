@@ -12,20 +12,40 @@ html(lang='en')
                 a.back-main(href='/dbs' class="gg-arrow-left")
                 a.exit-account(href='/exit') Exit
 
-        h2.table-title=title
-        - var i = 0;
-        - var index = 0
-        table.w3-table-all#myTable2
-            tr
-                while index < keys.length
-                    - console.log("index = ", index)
-                    th(onclick="sortTable(" + index + ")") #{keys[index]}
-                    - index++
+        .dbDiv
+            .dbContent
+                h2.table-title=title
+                - var i = 0;
+                - var index = 0
+                table.w3-table-all#myTable2
+                    tr
+                        while index < keys.length
+                            th(onclick="sortTable(" + index + ")") #{keys[index]}
+                            - index++
 
-            while i < data.length
-                tr
-                    for val in Object.values(data[i])
-                        td #{val}
-                - i++
+                    while i < data.length
+                        tr
+                            for val in Object.values(data[i])
+                                td #{val}
+                        - i++
+
+            .dbFilter
+                h2.table-title Фильтры
+                p.dbTitle(hidden)=title
+                form.dbFilterForm(action="/filter/"+title, method='post')
+                    for key in Object.keys(data[0])
+                        h3=key+":"
+                        if typeof(data[0][key])==='object'
+                            .startEndDiv
+                                p ОТ
+                                input(type='number' name="start_"+key+"")
+                                p ДО
+                                input(type='number' name="stop_"+key+"")
+                        else
+                            input(type='text' name=key)
+                    br
+                    br
+                    button Подтвердить
+                        //число - object, строка - string
 
         footer
