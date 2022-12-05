@@ -476,7 +476,21 @@ router.post('/filter/:title', async (req, res) =>
       res.render('table', {title: title, keys: keys, data: scooters});
       break;
     case 'Склады':
-      res.redirect('/warehouses');
+      let minNum =  req.body.start_houseNumber === '' ? -1: +req.body.start_houseNumber-1;
+      let maxNum =  req.body.stop_houseNumber === '' ? Number.MAX_SAFE_INTEGER: +req.body.stop_houseNumber+1;
+      result = await session.run(
+          'match (wh:WAREHOUSE) \n' +
+          'WHERE wh.houseNumber > $minNum and wh.houseNumber < $maxNum\n' +
+          'return wh',
+          {minNum: minNum, maxNum: maxNum}
+      );
+      let whs = [];
+      for (let i in result.records)
+      {
+        whs.push(result.records[i].get(0).properties)
+      }
+      keys = ['houseNumber'];
+      res.render('table', {title: title, keys: keys,data: whs});
       break;
     case 'Площадки выгрузки':
       res.redirect('/unloading_area');
