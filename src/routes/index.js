@@ -421,9 +421,9 @@ router.get('/add_edit_scooter', async (req, res) =>
 
 router.post('/filter/:title', async (req, res) =>
 {
-  console.log(req.body)
+  //console.log(req.body)
   let title = req.params.title
-  console.log("title = ", title)
+  //console.log("title = ", title)
   let result = '';
   let keys = '';
   switch (title)
@@ -466,7 +466,7 @@ router.post('/filter/:title', async (req, res) =>
           {start_number: start_number, stop_number: stop_number, start_battery: start_battery, stop_battery: stop_battery, start_coord_x: start_coord_x,
             stop_coord_x: stop_coord_x, start_coord_y: start_coord_y, stop_coord_y: stop_coord_y, status:status}
       );
-      console.log(result.records)
+
       let scooters = [];
       for (let i in result.records)
       {
@@ -515,7 +515,32 @@ router.post('/filter/:title', async (req, res) =>
       res.render('table', {title: title, keys: keys, data: areas});
       break;
     case 'Поездки':
-      res.redirect('/trips');
+      let cost1 = req.body.start_cost === '' ? -1: +req.body.start_cost-1;
+      let cost2 = req.body.stop_cost === '' ? Number.MAX_SAFE_INTEGER: +req.body.stop_cost+1;
+      let time_end1 = req.body.start_time_end === '' ? -1: +req.body.start_time_end-1;
+      let time_end2 = req.body.stop_time_end === '' ? Number.MAX_SAFE_INTEGER: +req.body.stop_time_end+1;
+      let time_start1 = req.body.start_time_start === '' ? -1: +req.body.start_time_start-1;
+      let time_start2 = req.body.stop_time_start === '' ? Number.MAX_SAFE_INTEGER: +req.body.stop_time_start+1;
+      let trip_status = +req.body.status;
+
+      result = await session.run(
+          'match (trip:TRIP) \n' +
+          'WHERE trip.cost > $minCost and trip.cost < $maxCost and ' +
+          'trip.time_end > $minTimeEnd and trip.time_end < $maxTimeEnd and ' +
+          'trip.time_start > $minTimeStart and trip.time_start < $maxTimeStart and ' +
+          'trip.status = $status\n' +
+          'return trip',
+          {minCost: cost1, maxCost: cost2, minTimeEnd: time_end1, maxTimeEnd: time_end2,
+          minTimeStart: time_start1, maxTimeStart: time_start2, status: trip_status}
+      );
+
+      let trips = [];
+      for (let i in result.records)
+      {
+        trips.push(result.records[i].get(0).properties)
+      }
+      keys = ['cost', 'time_end', 'time_start', 'status'];
+      res.render('table', {title: title, keys: keys, data: trips});
       break;
   }
 
