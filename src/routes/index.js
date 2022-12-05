@@ -398,9 +398,24 @@ router.get('/add_scooter', async (req, res) =>
   res.render('add_scooter', {warehouses: warehouses})
 })
 
-router.get('/add_edit_scooter', (req, res) =>
+async function addEditScooter(info){
+  let result = await session.run(
+      'MERGE (a:SCOOTER {number: $number}) <- [net:TALKS_ABOUT] - (tech:TECH_CARD)\n' +
+      'ON CREATE SET a.battery = \'100\', a.coordinate_x = \'null\', a.coordinate_y = \'null\', a.status = $status, ' +
+      'tech.creationYear = $creation_year, tech.manufacturer = $manufacturer, tech.maxPowerCapacity = $max_power_cap, tech.mileage = $mileage\n' +
+      'ON MATCH SET a.status = $status,' +
+      'tech.mileage = $mileage\n' +
+      'return a, net, tech',
+      {number: info.number, creation_year: info.creation_year, manufacturer: info.manufacturer,
+        max_power_cap: info.max_power_cap, mileage: info.mileage, status: info.status}
+  )
+  return result
+}
+
+router.get('/add_edit_scooter', async (req, res) =>
 {
   console.log(req.query)
+  await addEditScooter(req.query)
   res.redirect('/add_scooter')
 })
 
