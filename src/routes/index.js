@@ -424,10 +424,12 @@ router.post('/filter/:title', async (req, res) =>
   console.log(req.body)
   let title = req.params.title
   console.log("title = ", title)
+  let result = '';
+  let keys = '';
   switch (title)
   {
     case 'Пользователи':
-      let result = await session.run(
+      result = await session.run(
         'match (user:USER) \n' +
         'WHERE user.name CONTAINS $name and user.password CONTAINS $password and user.login CONTAINS $login and ' +
         'user.type CONTAINS $type and user.phone CONTAINS $phone\n' +
@@ -439,11 +441,39 @@ router.post('/filter/:title', async (req, res) =>
       {
         users.push(result.records[i].get(0).properties)
       }
-      let keys = ['name', 'password', 'login', 'type', 'phone'];
+      keys = ['name', 'password', 'login', 'type', 'phone'];
       res.render('table', {title: title, keys: keys,data: users});
       break;
     case 'Самокаты':
-      res.redirect('/scooters');
+      let start_number = req.body.start_number === ''? -1: +req.body.start_number-1;
+      let stop_number = req.body.stop_number === ''? Number.MAX_SAFE_INTEGER: +req.body.stop_number+1;
+      let start_battery = req.body.start_battery === '' ? -1: +req.body.start_battery-1;
+      let stop_battery = req.body.stop_battery === ''? 101: +req.body.stop_battery+1;
+      let start_coord_x = req.body.start_coordinate_x === ''? -181: +req.body.start_coordinate_x-1;
+      let stop_coord_x = req.body.stop_coordinate_x === ''? 181: +req.body.stop_coordinate_x+1;
+      let start_coord_y = req.body.start_coordinate_y === ''? -91: +req.body.start_coordinate_y-1;
+      let stop_coord_y = req.body.stop_coordinate_y === ''? 91: +req.body.stop_coordinate_y+1;
+      let status = req.body.status;
+
+      result = await session.run(
+          'match (sc:SCOOTER) \n' +
+          'WHERE sc.number > $start_number and sc.number < $stop_number and ' +
+          'sc.battery > $start_battery and sc.battery < $stop_battery and ' +
+          'sc.coordinate_x > $start_coord_x and sc.coordinate_x < $stop_coord_x and ' +
+          'sc.coordinate_y > $start_coord_y and sc.coordinate_y < $stop_coord_y and ' +
+          'sc.status CONTAINS $status\n' +
+          'return sc',
+          {start_number: start_number, stop_number: stop_number, start_battery: start_battery, stop_battery: stop_battery, start_coord_x: start_coord_x,
+            stop_coord_x: stop_coord_x, start_coord_y: start_coord_y, stop_coord_y: stop_coord_y, status:status}
+      );
+      console.log(result.records)
+      let scooters = [];
+      for (let i in result.records)
+      {
+        scooters.push(result.records[i].get(0).properties)
+      }
+      keys = ['number', 'battery', 'coordinate_x', 'coordinate_y', 'status'];
+      res.render('table', {title: title, keys: keys, data: scooters});
       break;
     case 'Склады':
       res.redirect('/warehouses');
