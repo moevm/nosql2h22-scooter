@@ -493,7 +493,26 @@ router.post('/filter/:title', async (req, res) =>
       res.render('table', {title: title, keys: keys,data: whs});
       break;
     case 'Площадки выгрузки':
-      res.redirect('/unloading_area');
+      let coord_x1 = req.body.start_coordinate_x === ''? -181: +req.body.start_coordinate_x-1;
+      let coord_x2 = req.body.stop_coordinate_x === ''? 181: +req.body.stop_coordinate_x+1;
+      let coord_y1 = req.body.start_coordinate_y === ''? -91: +req.body.start_coordinate_y-1;
+      let coord_y2 = req.body.stop_coordinate_y === ''? 91: +req.body.stop_coordinate_y+1;
+
+      result = await session.run(
+          'match (area:UNLOADING_AREA) \n' +
+          'WHERE area.address CONTAINS $address and ' +
+          'area.coordinate_x > $start_coord_x and area.coordinate_x < $stop_coord_x and ' +
+          'area.coordinate_y > $start_coord_y and area.coordinate_y < $stop_coord_y\n' +
+          'return area',
+          {address: req.body.address, start_coord_x: coord_x1, stop_coord_x: coord_x2, start_coord_y: coord_y1, stop_coord_y: coord_y2}
+      );
+      let areas = [];
+      for (let i in result.records)
+      {
+        areas.push(result.records[i].get(0).properties)
+      }
+      keys = ['address', 'coordinate_x', 'coordinate_y'];
+      res.render('table', {title: title, keys: keys, data: areas});
       break;
     case 'Поездки':
       res.redirect('/trips');
