@@ -1,9 +1,11 @@
 var express = require('express');
 var router = express.Router();
+const fs = require('fs');
 
 let aggregated = require('../public/aggregated')
 
 let neo4j = require('neo4j-driver')
+const alert = require("alert");
 var uri = "neo4j://localhost:7687"
 var user = "neo4j"
 var password = "0000"
@@ -14,7 +16,7 @@ async function getBd(){
   let result = await session.run(
       'MATCH (a) RETURN a SKIP 0 LIMIT 100'
   )
-  console.log(result)
+  return result
 }
 
 async function getClients(){
@@ -137,7 +139,6 @@ router.get('/enterLogin', async (req, res) => {
   if (user_type === 'admin' || user_type === 'user'){
     res.redirect('/main')
   } else {
-    var alert = require('alert');
     alert('Incorrect login or password');
     res.redirect('/')
   }
@@ -546,9 +547,38 @@ router.post('/filter/:title', async (req, res) =>
 
 })
 
-router.get('/export', (req, res) =>
+const exportNodePath = './src/exported/nodes.json';
+const exportRelPath = './src/exported/relationships.json';
+router.get('/export', async (req, res) =>
 {
   console.log("export")
+  let DB = await getBd();
+  let nodes = []
+  for (let i in DB.records)
+  {
+    nodes.push(DB.records[i].get(0))
+  }
+  console.log("nodes:\n", nodes)
+  fs.writeFile(exportNodePath, JSON.stringify(nodes, null, 2), function writeJSON(err) {
+    if (err) return console.log(err);
+    console.log(JSON.stringify(nodes));
+    console.log('writing to ' + nodes);
+  });
+
+  let rels = await session.run("match ()-[a]-() return a");
+  console.log("rels:\n", rels)
+  let relationships = []
+  for (let i in rels.records)
+  {
+    relationships.push(rels.records[i].get(0))
+  }
+  console.log("relationships:\n", relationships)
+  fs.writeFile(exportRelPath, JSON.stringify(relationships, null, 2), function writeJSON(err) {
+    if (err) return console.log(err);
+    console.log(JSON.stringify(relationships));
+    console.log('writing to ' + relationships);
+  });
+  alert('EXPORTED. Файлы лежат в src/exported');
   res.redirect('/dbs')
 })
 router.get('/import', (req, res) =>
