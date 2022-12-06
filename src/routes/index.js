@@ -546,4 +546,18 @@ router.post('/filter/:title', async (req, res) =>
 
 })
 
+router.get('/export', (req, res) =>
+{
+  console.log("export")
+  res.redirect('/dbs')
+})
+router.get('/import', (req, res) =>
+{
+  console.log(req.query)
+  let path = req.query.path[req.query.path.length-1] === '/' ? req.query.path : req.query.path+'/'
+  let f = require(path + req.query.file)
+  console.log("file:\n", f)
+  res.redirect('/dbs')
+})
+
 module.exports = router;

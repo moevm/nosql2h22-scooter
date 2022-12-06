@@ -38,6 +38,15 @@ html(lang='en')
                     br
                     button.agg-select-button Подтвердить
 
+                form(action="/export", method="get").exportForm
+                    p База данных экспортируется в src/exported
+                    button.w3-button.importButton Export DB
+                form(action="/import", method="get").importForm
+                    p Введите путь к файлу и выберите файл:
+                    input(type="text" name="path" required)
+                    input(type="file" name="file" accept=".json" required)
+                    button.w3-button.exportButton Import DB
+
             div.db-right
                 form(action='/free-choice', method='get').multiform
                     .multiselect
@@ -86,4 +95,5 @@ html(lang='en')
 
 
                     button.db-button-right.w3-button Подтвердить
+
         footer

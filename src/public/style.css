@@ -272,3 +272,14 @@ select:focus{
 .dbFilterForm {
     margin-left: 10px;
 }
+
+.importButton, .exportButton {
+    background-color: rgba(192,192,192,0.74) !important;
+}
+
+.importForm, .exportForm {
+    margin: 10px 0;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    padding: 5px 20px;
+}
