@@ -8,7 +8,7 @@ WORKDIR /home/node/app
 # установка зависимостей
 # символ астериск ("*") используется для того чтобы по возможности
 # скопировать оба файла: package.json и package-lock.json
-COPY package*.json ./
+COPY /src/package*.json ./
 
 USER node
 
@@ -19,4 +19,4 @@ RUN npm install
 COPY --chown=node:node . .
 
 EXPOSE 3000
-CMD [ "node", "./bin/www" ]
+CMD [ "node", "./src/bin/www" ]

@@ -6,10 +6,14 @@ let aggregated = require('../public/aggregated')
 
 let neo4j = require('neo4j-driver')
 const alert = require("alert");
-var uri = "neo4j://localhost:7687"
-var user = "neo4j"
-var password = "0000"
-const driver = neo4j.driver(uri, neo4j.auth.basic(user, password))
+//var uri = "bolt://localhost:7687"
+//var user = "neo4j"
+//var password = "0000"
+//const driver = neo4j.driver(uri, neo4j.auth.basic(user, password))
+
+const url = 'bolt://0.0.0.0:7687';
+const driver = neo4j.driver(url);
+
 session = driver.session()
 
 async function getBd(){
