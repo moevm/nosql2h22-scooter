@@ -12,7 +12,7 @@ session = driver.session()
 
 async function getBd(){
   let result = await session.run(
-      'MATCH (a) RETURN a'
+      'MATCH (a) RETURN a LIMIT 100'
   )
   console.log(result)
 }
@@ -20,7 +20,7 @@ async function getBd(){
 async function getClients(){
   let users = []
   let result = await session.run(
-      'MATCH (a:USER) RETURN a'
+      'MATCH (a:USER) RETURN a LIMIT 100'
   )
   for (let i in result.records){
     users.push(result.records[i].get(0).properties)
@@ -31,7 +31,7 @@ async function getClients(){
 async function getScooters(){
   let scooters = []
   let result = await session.run(
-      'MATCH (a:SCOOTER) RETURN a'
+      'MATCH (a:SCOOTER) RETURN a LIMIT 100'
   )
   for (let i in result.records){
     scooters.push(result.records[i].get(0).properties)
@@ -42,7 +42,7 @@ async function getScooters(){
 async function getWarehouses(){
   let warehouses = []
   let result = await session.run(
-      'MATCH (a:WAREHOUSE) RETURN a'
+      'MATCH (a:WAREHOUSE) RETURN a LIMIT 100'
   )
   for (let i in result.records){
     warehouses.push(result.records[i].get(0).properties)
@@ -53,7 +53,7 @@ async function getWarehouses(){
 async function getTrips(){
   let trips = []
   let result = await session.run(
-      'MATCH (a:TRIP) RETURN a'
+      'MATCH (a:TRIP) RETURN a LIMIT 100'
   )
   for (let i in result.records){
     trips.push(result.records[i].get(0).properties)
@@ -64,7 +64,7 @@ async function getTrips(){
 async function getUnloadingAreas(){
   let unloading_areas = []
   let result = await session.run(
-      'MATCH (a:UNLOADING_AREA) RETURN a'
+      'MATCH (a:UNLOADING_AREA) RETURN a LIMIT 100'
   )
   for (let i in result.records){
     unloading_areas.push(result.records[i].get(0).properties)
@@ -122,7 +122,7 @@ router.get('/enterLogin', async (req, res) => {
   let password = req.query.password;
   let result = await session.run(
       'match (user:USER {login: $login, password: $password})  \n' +
-      'return user',
+      'return user LIMIT 100',
       {login: login, password: password}
   )
   if (result.records.length > 0)
@@ -245,7 +245,7 @@ async function attachedToScooters(scooter){
   let attachedToScooters = []
   let result = await session.run(
       'match (sc:SCOOTER{number: $number})-[net]-(node) \n' +
-      'return sc,net,node',
+      'return sc,net,node LIMIT 100',
       {number: scooter}
   )
   for (let i in result.records){
@@ -266,7 +266,7 @@ async function attachedToUsers(user){
   let attachedToUsers = []
   let result = await session.run(
       'match (us:USER{login: $login})-[net]-(node) \n' +
-      'return us,net,node',
+      'return us,net,node LIMIT 100',
       {login: user}
   )
   for (let i in result.records){
@@ -287,7 +287,7 @@ async function attachedToWarehouses(warehouse){
   let attachedToWarehouses = []
   let result = await session.run(
       'match (wr:WAREHOUSE{number: $number})-[net]-(node) \n' +
-      'return wr,net,node',
+      'return wr,net,node LIMIT 100',
       {number: warehouse}
   )
   for (let i in result.records){
@@ -308,7 +308,7 @@ async function attachedToUnloadingAreas(unloading_area){
   let attachedToUnloadingAreas = []
   let result = await session.run(
       'match (ua:UNLOADING_AREA{number: $number})-[net]-(node) \n' +
-      'return ua,net,node',
+      'return ua,net,node LIMIT 100',
       {number: unloading_area}
   )
   for (let i in result.records){
@@ -405,7 +405,7 @@ async function addEditScooter(info){
       'tech.creationYear = $creation_year, tech.manufacturer = $manufacturer, tech.maxPowerCapacity = $max_power_cap, tech.mileage = $mileage\n' +
       'ON MATCH SET a.status = $status,' +
       'tech.mileage = $mileage\n' +
-      'return a, net, tech',
+      'return a, net, tech LIMIT 100',
       {number: info.number, creation_year: info.creation_year, manufacturer: info.manufacturer,
         max_power_cap: info.max_power_cap, mileage: info.mileage, status: info.status}
   )
@@ -433,7 +433,7 @@ router.post('/filter/:title', async (req, res) =>
         'match (user:USER) \n' +
         'WHERE user.name CONTAINS $name and user.password CONTAINS $password and user.login CONTAINS $login and ' +
         'user.type CONTAINS $type and user.phone CONTAINS $phone\n' +
-        'return user',
+        'return user LIMIT 100',
         {name: req.body.name, password: req.body.password, login: req.body.login, type: req.body.type, phone: req.body.phone}
     );
       let users = [];
@@ -462,7 +462,7 @@ router.post('/filter/:title', async (req, res) =>
           'sc.coordinate_x > $start_coord_x and sc.coordinate_x < $stop_coord_x and ' +
           'sc.coordinate_y > $start_coord_y and sc.coordinate_y < $stop_coord_y and ' +
           'sc.status CONTAINS $status\n' +
-          'return sc',
+          'return sc LIMIT 100',
           {start_number: start_number, stop_number: stop_number, start_battery: start_battery, stop_battery: stop_battery, start_coord_x: start_coord_x,
             stop_coord_x: stop_coord_x, start_coord_y: start_coord_y, stop_coord_y: stop_coord_y, status:status}
       );
@@ -481,7 +481,7 @@ router.post('/filter/:title', async (req, res) =>
       result = await session.run(
           'match (wh:WAREHOUSE) \n' +
           'WHERE wh.houseNumber > $minNum and wh.houseNumber < $maxNum\n' +
-          'return wh',
+          'return wh LIMIT 100',
           {minNum: minNum, maxNum: maxNum}
       );
       let whs = [];
@@ -503,7 +503,7 @@ router.post('/filter/:title', async (req, res) =>
           'WHERE area.address CONTAINS $address and ' +
           'area.coordinate_x > $start_coord_x and area.coordinate_x < $stop_coord_x and ' +
           'area.coordinate_y > $start_coord_y and area.coordinate_y < $stop_coord_y\n' +
-          'return area',
+          'return area LIMIT 100',
           {address: req.body.address, start_coord_x: coord_x1, stop_coord_x: coord_x2, start_coord_y: coord_y1, stop_coord_y: coord_y2}
       );
       let areas = [];
@@ -529,7 +529,7 @@ router.post('/filter/:title', async (req, res) =>
           'trip.time_end > $minTimeEnd and trip.time_end < $maxTimeEnd and ' +
           'trip.time_start > $minTimeStart and trip.time_start < $maxTimeStart and ' +
           'trip.status = $status\n' +
-          'return trip',
+          'return trip LIMIT 100',
           {minCost: cost1, maxCost: cost2, minTimeEnd: time_end1, maxTimeEnd: time_end2,
           minTimeStart: time_start1, maxTimeStart: time_start2, status: trip_status}
       );
