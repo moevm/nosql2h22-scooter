@@ -9,10 +9,10 @@ const alert = require("alert");
 //var uri = "bolt://localhost:7687"
 //var user = "neo4j"
 //var password = "0000"
-//const driver = neo4j.driver(uri, neo4j.auth.basic(user, password))
+//const driver = neo4j.driver(uri, neo4j.auth.basic(user, password), { disableLosslessIntegers: true })
 
-const url = 'bolt://0.0.0.0:7687';
-const driver = neo4j.driver(url);
+var url = 'bolt://neo4j:7687';
+var driver = neo4j.driver(url);
 
 session = driver.session()
 
@@ -551,10 +551,13 @@ router.post('/filter/:title', async (req, res) =>
 
 })
 
-const exportNodePath = './src/exported/nodes.json';
-const exportRelPath = './src/exported/relationships.json';
+//const exportNodePath = './src/exported/nodes.json';
+const exportRelPath = '../exported/bd.json';
 router.get('/export', async (req, res) =>
 {
+  await session.close()
+  session = driver.session()
+
   console.log("export")
   let DB = await getBd();
   let nodes = []
@@ -562,22 +565,18 @@ router.get('/export', async (req, res) =>
   {
     nodes.push(DB.records[i].get(0))
   }
-  console.log("nodes:\n", nodes)
-  fs.writeFile(exportNodePath, JSON.stringify(nodes, null, 2), function writeJSON(err) {
-    if (err) return console.log(err);
-    console.log(JSON.stringify(nodes));
-    console.log('writing to ' + nodes);
-  });
+  //console.log("nodes:\n", nodes)
 
-  let rels = await session.run("match ()-[a]-() return a");
+  let rels = await session.run("match (a)-[b]-(c) where id(a) > id(c) return b");
   console.log("rels:\n", rels)
   let relationships = []
   for (let i in rels.records)
   {
     relationships.push(rels.records[i].get(0))
   }
-  console.log("relationships:\n", relationships)
-  fs.writeFile(exportRelPath, JSON.stringify(relationships, null, 2), function writeJSON(err) {
+  let exprt = {'nodes': nodes, 'relationships': relationships}
+  //console.log("relationships:\n", uniqueArray)
+  fs.writeFile(exportRelPath, JSON.stringify(exprt, null, 2), function writeJSON(err) {
     if (err) return console.log(err);
     console.log(JSON.stringify(relationships));
     console.log('writing to ' + relationships);
@@ -585,12 +584,44 @@ router.get('/export', async (req, res) =>
   alert('EXPORTED. Файлы лежат в src/exported');
   res.redirect('/dbs')
 })
-router.get('/import', (req, res) =>
+
+async function importDB(file)
+{
+  await session.close()
+  session = driver.session()
+
+  await session.run(
+      'match(a) detach delete a'
+  )
+  //console.log(file.nodes)
+  for (let i in file.nodes)
+  {
+    console.log(file.nodes[i].labels)
+    let str = JSON.stringify(file.nodes[i].properties).replace(/{"/g, '{').replace(/,"/g, ',').replace(/":/g, ':')
+    await session.run(
+        'create (:' + file.nodes[i].labels[0]  + str + ')'
+    )
+  }
+  for (let i in file.relationships){
+    console.log(file.relationships[i].type, ' ', file.relationships[i].start, ' ', file.relationships[i].end)
+    await session.run(
+        'MATCH (n)\n' +
+        'WHERE id(n) = $n\n' +
+        'MATCH (c)\n' +
+        'WHERE id(c) = $c\n' +
+        'create (n)-[:' + file.relationships[i].type + ']->(c)',
+        {n:file.relationships[i].start, c:file.relationships[i].end}
+    )
+    console.log(file.relationships[i])
+  }
+}
+router.get('/import', async (req, res) =>
 {
   console.log(req.query)
   let path = req.query.path[req.query.path.length-1] === '/' ? req.query.path : req.query.path+'/'
-  let f = require(path + req.query.file)
-  console.log("file:\n", f)
+  let f = require('../exported/bd.json')
+  //console.log("file:\n", f)
+  await importDB(f)
   res.redirect('/dbs')
 })
 
