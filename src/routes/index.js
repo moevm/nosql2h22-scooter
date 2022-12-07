@@ -4,6 +4,7 @@ const fs = require('fs');
 
 let aggregated = require('../public/aggregated')
 
+var importFlag = false;
 let neo4j = require('neo4j-driver')
 const alert = require("alert");
 //var uri = "bolt://localhost:7687"
@@ -12,7 +13,7 @@ const alert = require("alert");
 //const driver = neo4j.driver(uri, neo4j.auth.basic(user, password), { disableLosslessIntegers: true })
 
 var url = 'bolt://neo4j:7687';
-var driver = neo4j.driver(url);
+var driver = neo4j.driver(url, { disableLosslessIntegers: true });
 
 session = driver.session()
 
@@ -79,7 +80,36 @@ async function getUnloadingAreas(){
 }
 
 /* GET home page. */
-router.get('/', function(req, res) {
+router.get('/', async function(req, res) {
+  if (importFlag === false)
+  {
+    importFlag = true
+    let file = require('../exported/bd.json');
+    await session.run(
+        'match(a) detach delete a'
+    )
+    //console.log(file.nodes)
+    for (let i in file.nodes)
+    {
+      console.log(file.nodes[i].labels)
+      let str = JSON.stringify(file.nodes[i].properties).replace(/{"/g, '{').replace(/,"/g, ',').replace(/":/g, ':')
+      await session.run(
+          'create (:' + file.nodes[i].labels[0]  + str + ')'
+      )
+    }
+    for (let i in file.relationships){
+      console.log(file.relationships[i].type, ' ', file.relationships[i].start, ' ', file.relationships[i].end)
+      await session.run(
+          'MATCH (n)\n' +
+          'WHERE id(n) = $n\n' +
+          'MATCH (c)\n' +
+          'WHERE id(c) = $c\n' +
+          'create (n)-[:' + file.relationships[i].type + ']->(c)',
+          {n:file.relationships[i].start, c:file.relationships[i].end}
+      )
+      console.log(file.relationships[i])
+    }
+  }
   let cookies = req.cookies;
   if (!cookies.type) {
     res.render('login_page', {title: 'Login'});
@@ -173,7 +203,7 @@ router.get('/aggregated', (req, res) => {
 router.get('/clients', async (req, res) => {
   let users = await getClients()
   //getBd()
-  let keys = Object.keys(users[0])
+  let keys = users.length > 0 ? Object.keys(users[0]): ['name', 'password', 'login', 'type', 'phone']
   console.log(keys)
   let type = req.cookies.type;
   if (type === 'admin') {
@@ -189,7 +219,7 @@ router.get('/clients', async (req, res) => {
 router.get('/scooters', async (req, res) => {
   let scooters = await getScooters()
   console.log(scooters)
-  let keys = Object.keys(scooters[0])
+  let keys = scooters.length > 0 ? Object.keys(scooters[0]): ['number', 'battery', 'coordinate_x', 'coordinate_y', 'status'];
   console.log(keys)
   let type = req.cookies.type;
   if (type === 'admin') {
@@ -203,7 +233,7 @@ router.get('/scooters', async (req, res) => {
 
 router.get('/warehouses', async (req, res) => {
   let warehouses = await getWarehouses()
-  let keys = Object.keys(warehouses[0])
+  let keys = warehouses.length > 1 ? Object.keys(warehouses[0]): ['houseNumber'];
   let type = req.cookies.type;
   if (type === 'admin') {
     res.render('table', {title: 'Склады', keys: keys, data: warehouses});
@@ -216,7 +246,7 @@ router.get('/warehouses', async (req, res) => {
 
 router.get('/unloading_area', async (req, res) => {
   let unloading_areas = await getUnloadingAreas()
-  let keys = Object.keys(unloading_areas[0])
+  let keys = unloading_areas.length > 0 ? Object.keys(unloading_areas[0]): ['address', 'coordinate_x', 'coordinate_y', 'number'];
   let type = req.cookies.type;
   if (type === 'admin') {
     res.render('table', {title: 'Площадки выгрузки', keys: keys, data: unloading_areas});
@@ -229,7 +259,7 @@ router.get('/unloading_area', async (req, res) => {
 
 router.get('/trips', async (req, res) => {
   let trips = await getTrips()
-  let keys = Object.keys(trips[0])
+  let keys = trips.length > 0 ? Object.keys(trips[0]) : ['cost', 'time_end', 'time_start', 'status'];
   let type = req.cookies.type;
   if (type === 'admin') {
     res.render('table', {title: 'Поездки', keys: keys, data: trips});
@@ -446,7 +476,8 @@ router.post('/filter/:title', async (req, res) =>
       {
         users.push(result.records[i].get(0).properties)
       }
-      keys = ['name', 'password', 'login', 'type', 'phone'];
+      console.log("users = ", users)
+      keys = users.length > 0 ? Object.keys(users[0]): ['name', 'password', 'login', 'type', 'phone'];
       res.render('table', {title: title, keys: keys,data: users});
       break;
     case 'Самокаты':
@@ -477,7 +508,7 @@ router.post('/filter/:title', async (req, res) =>
       {
         scooters.push(result.records[i].get(0).properties)
       }
-      keys = ['number', 'battery', 'coordinate_x', 'coordinate_y', 'status'];
+      keys = scooters.length > 0 ? Object.keys(scooters[0]): ['number', 'battery', 'coordinate_x', 'coordinate_y', 'status'];
       res.render('table', {title: title, keys: keys, data: scooters});
       break;
     case 'Склады':
@@ -494,7 +525,7 @@ router.post('/filter/:title', async (req, res) =>
       {
         whs.push(result.records[i].get(0).properties)
       }
-      keys = ['houseNumber'];
+      keys = whs.length > 1 ? Object.keys(whs[0]): ['houseNumber'];
       res.render('table', {title: title, keys: keys,data: whs});
       break;
     case 'Площадки выгрузки':
@@ -502,21 +533,25 @@ router.post('/filter/:title', async (req, res) =>
       let coord_x2 = req.body.stop_coordinate_x === ''? 181: +req.body.stop_coordinate_x+1;
       let coord_y1 = req.body.start_coordinate_y === ''? -91: +req.body.start_coordinate_y-1;
       let coord_y2 = req.body.stop_coordinate_y === ''? 91: +req.body.stop_coordinate_y+1;
+      let number1 = req.body.start_number === '' ? -1: +req.body.start_number-1;
+      let number2 = req.body.stop_number === '' ? Number.MAX_SAFE_INTEGER: +req.body.stop_number+1;
+      let address = req.body.address;
 
       result = await session.run(
           'match (area:UNLOADING_AREA) \n' +
-          'WHERE area.address CONTAINS $address and ' +
+          'WHERE area.number > $minNum and area.number < $maxNum and ' +
+          'area.address CONTAINS $address and ' +
           'area.coordinate_x > $start_coord_x and area.coordinate_x < $stop_coord_x and ' +
           'area.coordinate_y > $start_coord_y and area.coordinate_y < $stop_coord_y\n' +
           'return area SKIP 0 LIMIT 100',
-          {address: req.body.address, start_coord_x: coord_x1, stop_coord_x: coord_x2, start_coord_y: coord_y1, stop_coord_y: coord_y2}
+          {minNum: number1, maxNum: number2 ,address: address, start_coord_x: coord_x1, stop_coord_x: coord_x2, start_coord_y: coord_y1, stop_coord_y: coord_y2}
       );
       let areas = [];
       for (let i in result.records)
       {
         areas.push(result.records[i].get(0).properties)
       }
-      keys = ['address', 'coordinate_x', 'coordinate_y'];
+      keys = areas.length > 0 ? Object.keys(areas[0]): ['number', 'address', 'coordinate_x', 'coordinate_y'];
       res.render('table', {title: title, keys: keys, data: areas});
       break;
     case 'Поездки':
@@ -544,7 +579,7 @@ router.post('/filter/:title', async (req, res) =>
       {
         trips.push(result.records[i].get(0).properties)
       }
-      keys = ['cost', 'time_end', 'time_start', 'status'];
+      keys = trips.length > 0 ? Object.keys(trips[0]) : ['cost', 'time_start', 'time_end', 'status'];
       res.render('table', {title: title, keys: keys, data: trips});
       break;
   }
@@ -617,11 +652,10 @@ async function importDB(file)
 }
 router.get('/import', async (req, res) =>
 {
-  console.log(req.query)
-  let path = req.query.path[req.query.path.length-1] === '/' ? req.query.path : req.query.path+'/'
   let f = require('../exported/bd.json')
   //console.log("file:\n", f)
   await importDB(f)
+  alert('IMPORT');
   res.redirect('/dbs')
 })
 

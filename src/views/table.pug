@@ -11,7 +11,7 @@ html(lang='en')
             .container
                 a.back-main(href='/dbs' class="gg-arrow-left")
                 a.exit-account(href='/exit') Exit
-
+        - console.log("data = ", data, " keys = ", keys)
         .dbDiv
             .dbContent
                 h2.table-title=title
@@ -25,8 +25,8 @@ html(lang='en')
 
                     while i < data.length
                         tr
-                            for val in Object.values(data[i])
-                                td #{val}
+                            for key in keys
+                                td #{data[i][key]}
                         - i++
 
             - let stringKeys = ['name', 'password', 'login', 'type', 'phone', 'address', 'status']

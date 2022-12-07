@@ -42,9 +42,7 @@ html(lang='en')
                     p База данных экспортируется в src/exported
                     button.w3-button.importButton Export DB
                 form(action="/import", method="get").importForm
-                    p Введите путь к файлу и выберите файл:
-                    input(type="text" name="path" required)
-                    input(type="file" name="file" accept=".json" required)
+                    p База данных импортируется из src/exported/bd.json
                     button.w3-button.exportButton Import DB
 
             div.db-right
