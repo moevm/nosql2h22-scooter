@@ -586,8 +586,6 @@ router.post('/filter/:title', async (req, res) =>
 
 })
 
-//const exportNodePath = './src/exported/nodes.json';
-const exportRelPath = '../exported/bd.json';
 router.get('/export', async (req, res) =>
 {
   await session.close()
@@ -611,7 +609,7 @@ router.get('/export', async (req, res) =>
   }
   let exprt = {'nodes': nodes, 'relationships': relationships}
   //console.log("relationships:\n", uniqueArray)
-  fs.writeFile(exportRelPath, JSON.stringify(exprt, null, 2), function writeJSON(err) {
+  fs.writeFile('src/exported/bd.json', JSON.stringify(exprt, null, 2), function writeJSON(err) {
     if (err) return console.log(err);
     console.log(JSON.stringify(relationships));
     console.log('writing to ' + relationships);
@@ -637,15 +635,31 @@ async function importDB(file)
         'create (:' + file.nodes[i].labels[0]  + str + ')'
     )
   }
+  //console.log("RELATIONSHIP IMPORT")
+  let str = ''
+  let node1 = {}
+  let node2 = {}
   for (let i in file.relationships){
-    console.log(file.relationships[i].type, ' ', file.relationships[i].start, ' ', file.relationships[i].end)
+    node1 = {}
+    node2 = {}
+    console.log(file.relationships[i].type, ' ', file.relationships[i].start, '  ', file.relationships[i].end)
+    for (let j in file.nodes)
+    {
+      if (file.nodes[j].identity === file.relationships[i].start)
+      {
+        node1 = file.nodes[j]
+      }
+      if (file.nodes[j].identity === file.relationships[i].end)
+      {
+        node2 = file.nodes[j]
+      }
+    }
+    str = 'MATCH (n:' + node1.labels[0] + ' ' + JSON.stringify(node1.properties).replace(/{"/g, '{').replace(/,"/g, ',').replace(/":/g, ':') + ')\n' +
+        'MATCH (c:' + node2.labels[0] + ' ' + JSON.stringify(node2.properties).replace(/{"/g, '{').replace(/,"/g, ',').replace(/":/g, ':') + ')\n' +
+        'create (n)-[:' + file.relationships[i].type + ']->(c)'
+    //console.log("str =", str)
     await session.run(
-        'MATCH (n)\n' +
-        'WHERE id(n) = $n\n' +
-        'MATCH (c)\n' +
-        'WHERE id(c) = $c\n' +
-        'create (n)-[:' + file.relationships[i].type + ']->(c)',
-        {n:file.relationships[i].start, c:file.relationships[i].end}
+        str
     )
     console.log(file.relationships[i])
   }
