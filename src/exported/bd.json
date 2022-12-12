@@ -123,7 +123,7 @@
         "battery": 81,
         "coordinate_x": 5,
         "coordinate_y": 11,
-        "status": 3
+        "status": "free"
       },
       "elementId": "9"
     },

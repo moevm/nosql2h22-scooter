@@ -466,8 +466,8 @@ router.post('/filter/:title', async (req, res) =>
     case 'Пользователи':
       result = await session.run(
         'match (user:USER) \n' +
-        'WHERE user.name CONTAINS $name and user.password CONTAINS $password and user.login CONTAINS $login and ' +
-        'user.type CONTAINS $type and user.phone CONTAINS $phone\n' +
+        'WHERE toLower(user.name) CONTAINS toLower($name) and toLower(user.password) CONTAINS toLower($password) and toLower(user.login) CONTAINS toLower($login) and ' +
+        'toLower(user.type) CONTAINS toLower($type) and toLower(user.phone) CONTAINS toLower($phone)\n' +
         'return user SKIP 0 LIMIT 100',
         {name: req.body.name, password: req.body.password, login: req.body.login, type: req.body.type, phone: req.body.phone}
     );
@@ -497,7 +497,7 @@ router.post('/filter/:title', async (req, res) =>
           'sc.battery > $start_battery and sc.battery < $stop_battery and ' +
           'sc.coordinate_x > $start_coord_x and sc.coordinate_x < $stop_coord_x and ' +
           'sc.coordinate_y > $start_coord_y and sc.coordinate_y < $stop_coord_y and ' +
-          'sc.status CONTAINS $status\n' +
+          'toLower(sc.status) CONTAINS toLower($status)\n' +
           'return sc SKIP 0 LIMIT 100',
           {start_number: start_number, stop_number: stop_number, start_battery: start_battery, stop_battery: stop_battery, start_coord_x: start_coord_x,
             stop_coord_x: stop_coord_x, start_coord_y: start_coord_y, stop_coord_y: stop_coord_y, status:status}
@@ -540,7 +540,7 @@ router.post('/filter/:title', async (req, res) =>
       result = await session.run(
           'match (area:UNLOADING_AREA) \n' +
           'WHERE area.number > $minNum and area.number < $maxNum and ' +
-          'area.address CONTAINS $address and ' +
+          'toLower(area.address) CONTAINS toLower($address) and ' +
           'area.coordinate_x > $start_coord_x and area.coordinate_x < $stop_coord_x and ' +
           'area.coordinate_y > $start_coord_y and area.coordinate_y < $stop_coord_y\n' +
           'return area SKIP 0 LIMIT 100',
@@ -561,14 +561,14 @@ router.post('/filter/:title', async (req, res) =>
       let time_end2 = req.body.stop_time_end === '' ? Number.MAX_SAFE_INTEGER: +req.body.stop_time_end+1;
       let time_start1 = req.body.start_time_start === '' ? -1: +req.body.start_time_start-1;
       let time_start2 = req.body.stop_time_start === '' ? Number.MAX_SAFE_INTEGER: +req.body.stop_time_start+1;
-      let trip_status = +req.body.status;
+      let trip_status = req.body.status;
 
       result = await session.run(
           'match (trip:TRIP) \n' +
           'WHERE trip.cost > $minCost and trip.cost < $maxCost and ' +
           'trip.time_end > $minTimeEnd and trip.time_end < $maxTimeEnd and ' +
           'trip.time_start > $minTimeStart and trip.time_start < $maxTimeStart and ' +
-          'trip.status = $status\n' +
+          'toLower(trip.status) contains toLower($status)\n' +
           'return trip SKIP 0 LIMIT 100',
           {minCost: cost1, maxCost: cost2, minTimeEnd: time_end1, maxTimeEnd: time_end2,
           minTimeStart: time_start1, maxTimeStart: time_start2, status: trip_status}
