@@ -7,9 +7,9 @@ let aggregated = require('../public/aggregated')
 var importFlag = false;
 let neo4j = require('neo4j-driver')
 const alert = require("alert");
-//var uri = "bolt://localhost:7687"
-//var user = "neo4j"
-//var password = "0000"
+var uri = "bolt://localhost:7687"
+var user = "neo4j"
+var password = "0000"
 //const driver = neo4j.driver(uri, neo4j.auth.basic(user, password), { disableLosslessIntegers: true })
 
 var url = 'bolt://neo4j:7687';
@@ -233,7 +233,7 @@ router.get('/scooters', async (req, res) => {
 
 router.get('/warehouses', async (req, res) => {
   let warehouses = await getWarehouses()
-  let keys = warehouses.length > 1 ? Object.keys(warehouses[0]): ['houseNumber'];
+  let keys = warehouses.length > 0 ? Object.keys(warehouses[0]): ['houseNumber', 'coordinate_x', 'coordinate_y', 'capacity'];
   let type = req.cookies.type;
   if (type === 'admin') {
     res.render('table', {title: 'Склады', keys: keys, data: warehouses});
@@ -512,20 +512,31 @@ router.post('/filter/:title', async (req, res) =>
       res.render('table', {title: title, keys: keys, data: scooters});
       break;
     case 'Склады':
+
+      console.log(req.body)
       let minNum =  req.body.start_houseNumber === '' ? -1: +req.body.start_houseNumber-1;
       let maxNum =  req.body.stop_houseNumber === '' ? Number.MAX_SAFE_INTEGER: +req.body.stop_houseNumber+1;
+      let coord_x_start = req.body.start_coordinate_x === ''? -181: +req.body.start_coordinate_x-1;
+      let coord_x_end = req.body.stop_coordinate_x === ''? 181: +req.body.stop_coordinate_x+1;
+      let coord_y_start = req.body.start_coordinate_y === ''? -91: +req.body.start_coordinate_y-1;
+      let coord_y_end = req.body.stop_coordinate_y === ''? 91: +req.body.stop_coordinate_y+1;
+      let capacity1 = req.body.start_capacity === '' ? -1 : +req.body.start_capacity-1;
+      let capacity2 = req.body.stop_capacity === '' ? Number.MAX_SAFE_INTEGER : +req.body.stop_capacity+1;
       result = await session.run(
           'match (wh:WAREHOUSE) \n' +
-          'WHERE wh.houseNumber > $minNum and wh.houseNumber < $maxNum\n' +
+          'WHERE wh.houseNumber > $minNum and wh.houseNumber < $maxNum and\n' +
+          'wh.coordinate_x > $cx1 and wh.coordinate_x < $cx2 and \n' +
+          'wh.coordinate_y > $cy1 and wh.coordinate_y < $cy2 and \n' +
+          'wh.capacity > $cap1 and wh.capacity < $cap2 \n' +
           'return wh SKIP 0 LIMIT 100',
-          {minNum: minNum, maxNum: maxNum}
+          {minNum: minNum, maxNum: maxNum, cx1: coord_x_start, cx2: coord_x_end, cy1: coord_y_start, cy2: coord_y_end, cap1: capacity1, cap2: capacity2}
       );
       let whs = [];
       for (let i in result.records)
       {
         whs.push(result.records[i].get(0).properties)
       }
-      keys = whs.length > 1 ? Object.keys(whs[0]): ['houseNumber'];
+      keys = whs.length > 0 ? Object.keys(whs[0]): ['houseNumber', 'coordinate_x', 'coordinate_y', 'capacity'];
       res.render('table', {title: title, keys: keys,data: whs});
       break;
     case 'Площадки выгрузки':
