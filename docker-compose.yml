@@ -4,13 +4,13 @@ services:
         image: neo4j:5.2
         environment:
           - NEO4J_AUTH=none
-        ports:
-          - '7474:7474'
-          - '7473:7473'
-          - '7687:7687'
+        volumes:
+          - "~/Downloads:home/node/app/import"
 
     web:
         build: .
+        volumes:
+          - "~/Downloads:home/node/app/import"
         ports:
           - "3000:3000"
         depends_on:
