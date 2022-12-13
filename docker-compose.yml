@@ -5,12 +5,12 @@ services:
         environment:
           - NEO4J_AUTH=none
         volumes:
-          - "~/Downloads:home/node/app/import"
+          - "~/Downloads:home/node/app/src/exported"
 
     web:
         build: .
         volumes:
-          - "~/Downloads:home/node/app/import"
+          - "~/Downloads:home/node/app/src/exported"
         ports:
           - "3000:3000"
         depends_on:
