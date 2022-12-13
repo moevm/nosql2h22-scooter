@@ -22,15 +22,15 @@ html(lang='en')
                         for i in warehouses
                             option=i.houseNumber
                     h3 Производитель:
-                    input.addScooterInput#scooterManufactutre(type='text', name='manufacturer')
+                    input.addScooterInput#scooterManufactutre(type='text', name='manufacturer' value = 'Apple')
                     h3 Год производства:
-                    input.addScooterInput#scooterYear(type='number', min=1900, max=2022, name='creation_year')
+                    input.addScooterInput#scooterYear(type='number', min=1900, max=2022, name='creation_year' value = '2021')
                     h3 Максимальная емкость батареи:
-                    input.addScooterInput#scooterBattery(type='number', name='max_power_cap')
+                    input.addScooterInput#scooterBattery(type='number', name='max_power_cap' value = 100)
                     h3 Текущий пробег:
-                    input.addScooterInput#scooterMileage(type='number', min=0, name='mileage')
+                    input.addScooterInput#scooterMileage(type='number', min=0, name='mileage' value = 0)
                     h3 Статус:
-                    input.addScooterInput#scooterStatus(type='text', name='status')
+                    input.addScooterInput#scooterStatus(type='text', name='status' value = 'free')
                     h3 Лог тех. обслуживания:
                     input.addScooterInput#scooterTechLog(type='text', name='techLog')
                     h3 Лог движения по складам:
