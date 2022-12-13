@@ -1,188 +1,7 @@
 {
   "nodes": [
     {
-      "identity": 14,
-      "labels": [
-        "USER"
-      ],
-      "properties": {
-        "name": "Пользователь Пользователич",
-        "password": "user",
-        "login": "user",
-        "type": "user",
-        "phone": "89111111111"
-      },
-      "elementId": "14"
-    },
-    {
-      "identity": 15,
-      "labels": [
-        "TRIP"
-      ],
-      "properties": {
-        "cost": 0,
-        "time_end": 0,
-        "time_start": 0,
-        "status": 0
-      },
-      "elementId": "15"
-    },
-    {
-      "identity": 16,
-      "labels": [
-        "SCOOTER"
-      ],
-      "properties": {
-        "number": 1,
-        "battery": 100,
-        "coordinate_x": 59.985444887334296,
-        "coordinate_y": 30.30097846294469,
-        "status": "test"
-      },
-      "elementId": "16"
-    },
-    {
-      "identity": 17,
-      "labels": [
-        "TECH_CARD"
-      ],
-      "properties": {
-        "maxPowerCapacity": 100,
-        "creationYear": 2022,
-        "manufacturer": "Xiaomi",
-        "mileage": ""
-      },
-      "elementId": "17"
-    },
-    {
-      "identity": 18,
-      "labels": [
-        "USER"
-      ],
-      "properties": {
-        "name": "Админ Админович",
-        "password": "admin",
-        "login": "admin",
-        "type": "admin",
-        "phone": "89111111112"
-      },
-      "elementId": "18"
-    },
-    {
-      "identity": 19,
-      "labels": [
-        "MAINTENANCE_LOG"
-      ],
-      "properties": {
-        "message": "it is ok"
-      },
-      "elementId": "19"
-    },
-    {
-      "identity": 20,
-      "labels": [
-        "TECH_CARD"
-      ],
-      "properties": {
-        "maxPowerCapacity": 98,
-        "creationYear": 2021,
-        "manufacturer": "Yandex",
-        "mileage": 100
-      },
-      "elementId": "20"
-    },
-    {
-      "identity": 21,
-      "labels": [
-        "WAREHOUSE_LOG"
-      ],
-      "properties": {
-        "creationTime": 0,
-        "actionType": 1
-      },
-      "elementId": "21"
-    },
-    {
-      "identity": 22,
-      "labels": [
-        "WAREHOUSE"
-      ],
-      "properties": {
-        "houseNumber": 1,
-        "coordinate_x": 60.003975,
-        "coordinate_y": 29.76127,
-        "capacity": 250
-      },
-      "elementId": "22"
-    },
-    {
-      "identity": 23,
-      "labels": [
-        "SCOOTER"
-      ],
-      "properties": {
-        "number": 2,
-        "battery": 81,
-        "coordinate_x": 5,
-        "coordinate_y": 11,
-        "status": "free"
-      },
-      "elementId": "23"
-    },
-    {
-      "identity": 24,
-      "labels": [
-        "SCOOTER"
-      ],
-      "properties": {
-        "number": 3,
-        "battery": 99,
-        "coordinate_x": 4
-      },
-      "elementId": "24"
-    },
-    {
-      "identity": 25,
-      "labels": [
-        "SCOOTER"
-      ],
-      "properties": {
-        "number": 4,
-        "battery": 100,
-        "coordinate_x": "null",
-        "coordinate_y": "null",
-        "status": "null"
-      },
-      "elementId": "25"
-    },
-    {
-      "identity": 26,
-      "labels": [
-        "TECH_CARD"
-      ],
-      "properties": {
-        "maxPowerCapacity": 3000,
-        "creationYear": 2019,
-        "manufacturer": "IPhone",
-        "mileage": "11928371"
-      },
-      "elementId": "26"
-    },
-    {
-      "identity": 27,
-      "labels": [
-        "UNLOADING_AREA"
-      ],
-      "properties": {
-        "number": 1,
-        "address": "Saint-Petersburg",
-        "coordinate_x": 27,
-        "coordinate_y": 67
-      },
-      "elementId": "27"
-    },
-    {
-      "identity": 28,
+      "identity": 62,
       "labels": [
         "WAREHOUSE"
       ],
@@ -192,10 +11,10 @@
         "coordinate_y": 30.452758,
         "capacity": 100
       },
-      "elementId": "28"
+      "elementId": "62"
     },
     {
-      "identity": 29,
+      "identity": 63,
       "labels": [
         "WAREHOUSE"
       ],
@@ -205,10 +24,10 @@
         "coordinate_y": 30.314509,
         "capacity": 123
       },
-      "elementId": "29"
+      "elementId": "63"
     },
     {
-      "identity": 30,
+      "identity": 64,
       "labels": [
         "WAREHOUSE"
       ],
@@ -218,149 +37,260 @@
         "coordinate_y": 30.385385,
         "capacity": 200
       },
-      "elementId": "30"
+      "elementId": "64"
+    },
+    {
+      "identity": 65,
+      "labels": [
+        "UNLOADING_AREA"
+      ],
+      "properties": {
+        "address": "Saint-Petersburg",
+        "coordinate_x": 27,
+        "coordinate_y": 67
+      },
+      "elementId": "65"
+    },
+    {
+      "identity": 66,
+      "labels": [
+        "USER"
+      ],
+      "properties": {
+        "name": "Pavel",
+        "password": "0000",
+        "login": "TypicalUser",
+        "type": 0,
+        "phone": "111222333"
+      },
+      "elementId": "66"
+    },
+    {
+      "identity": 67,
+      "labels": [
+        "TRIP"
+      ],
+      "properties": {
+        "cost": 0,
+        "time_end": 0,
+        "time_start": 0,
+        "status": 0
+      },
+      "elementId": "67"
+    },
+    {
+      "identity": 68,
+      "labels": [
+        "SCOOTER"
+      ],
+      "properties": {
+        "number": 1,
+        "battery": 86,
+        "coordinate_x": 10,
+        "coordinate_y": 20,
+        "status": 1
+      },
+      "elementId": "68"
+    },
+    {
+      "identity": 69,
+      "labels": [
+        "TECH_CARD"
+      ],
+      "properties": {
+        "maxPowerCapacity": 100,
+        "creationYear": 2022,
+        "manufacturer": "Xiaomi",
+        "mileage": 0
+      },
+      "elementId": "69"
+    },
+    {
+      "identity": 70,
+      "labels": [
+        "USER"
+      ],
+      "properties": {
+        "name": "Sergey",
+        "password": "1234",
+        "login": "TypicalWorker",
+        "type": 1,
+        "phone": "444555666"
+      },
+      "elementId": "70"
+    },
+    {
+      "identity": 71,
+      "labels": [
+        "MAINTENANCE_LOG"
+      ],
+      "properties": {
+        "message": "it is ok"
+      },
+      "elementId": "71"
+    },
+    {
+      "identity": 72,
+      "labels": [
+        "TECH_CARD"
+      ],
+      "properties": {
+        "maxPowerCapacity": 98,
+        "creationYear": 2021,
+        "manufacturer": "Yandex",
+        "mileage": 100
+      },
+      "elementId": "72"
+    },
+    {
+      "identity": 73,
+      "labels": [
+        "WAREHOUSE_LOG"
+      ],
+      "properties": {
+        "creationTime": 0,
+        "actionType": 1
+      },
+      "elementId": "73"
+    },
+    {
+      "identity": 74,
+      "labels": [
+        "WAREHOUSE"
+      ],
+      "properties": {
+        "houseNumber": 1,
+        "coordinate_x": 59.740682,
+        "coordinate_y": 30.285385,
+        "capacity": 201
+      },
+      "elementId": "74"
+    },
+    {
+      "identity": 75,
+      "labels": [
+        "SCOOTER"
+      ],
+      "properties": {
+        "number": 2,
+        "battery": 81,
+        "coordinate_x": 5,
+        "coordinate_y": 11,
+        "status": 3
+      },
+      "elementId": "75"
     }
   ],
   "relationships": [
     {
-      "identity": 14,
-      "start": 15,
-      "end": 16,
+      "identity": 80,
+      "start": 66,
+      "end": 67,
       "type": "TRAVELLED",
       "properties": {},
-      "elementId": "14",
-      "startNodeElementId": "15",
-      "endNodeElementId": "16"
+      "elementId": "80",
+      "startNodeElementId": "66",
+      "endNodeElementId": "67"
     },
     {
-      "identity": 15,
-      "start": 16,
-      "end": 17,
+      "identity": 81,
+      "start": 67,
+      "end": 68,
       "type": "USED",
       "properties": {},
-      "elementId": "15",
-      "startNodeElementId": "16",
-      "endNodeElementId": "17"
+      "elementId": "81",
+      "startNodeElementId": "67",
+      "endNodeElementId": "68"
     },
     {
-      "identity": 16,
-      "start": 18,
-      "end": 17,
+      "identity": 82,
+      "start": 69,
+      "end": 68,
       "type": "TALKS_ABOUT",
       "properties": {},
-      "elementId": "16",
-      "startNodeElementId": "18",
-      "endNodeElementId": "17"
+      "elementId": "82",
+      "startNodeElementId": "69",
+      "endNodeElementId": "68"
     },
     {
-      "identity": 17,
-      "start": 19,
-      "end": 17,
+      "identity": 83,
+      "start": 70,
+      "end": 68,
       "type": "HAS_NOW",
       "properties": {},
-      "elementId": "17",
-      "startNodeElementId": "19",
-      "endNodeElementId": "17"
+      "elementId": "83",
+      "startNodeElementId": "70",
+      "endNodeElementId": "68"
     },
     {
-      "identity": 18,
-      "start": 19,
-      "end": 20,
+      "identity": 84,
+      "start": 70,
+      "end": 71,
       "type": "CREATED",
       "properties": {},
-      "elementId": "18",
-      "startNodeElementId": "19",
-      "endNodeElementId": "20"
+      "elementId": "84",
+      "startNodeElementId": "70",
+      "endNodeElementId": "71"
     },
     {
-      "identity": 19,
-      "start": 20,
-      "end": 21,
+      "identity": 85,
+      "start": 71,
+      "end": 72,
       "type": "ATTACHED_TO",
       "properties": {},
-      "elementId": "19",
-      "startNodeElementId": "20",
-      "endNodeElementId": "21"
+      "elementId": "85",
+      "startNodeElementId": "71",
+      "endNodeElementId": "72"
     },
     {
-      "identity": 21,
-      "start": 19,
-      "end": 22,
+      "identity": 87,
+      "start": 70,
+      "end": 73,
       "type": "CREATED",
       "properties": {},
-      "elementId": "21",
-      "startNodeElementId": "19",
-      "endNodeElementId": "22"
+      "elementId": "87",
+      "startNodeElementId": "70",
+      "endNodeElementId": "73"
     },
     {
-      "identity": 20,
-      "start": 22,
-      "end": 21,
+      "identity": 86,
+      "start": 73,
+      "end": 72,
       "type": "ATTACHED_TO",
       "properties": {},
-      "elementId": "20",
-      "startNodeElementId": "22",
-      "endNodeElementId": "21"
+      "elementId": "86",
+      "startNodeElementId": "73",
+      "endNodeElementId": "72"
     },
     {
-      "identity": 22,
-      "start": 22,
-      "end": 23,
+      "identity": 102,
+      "start": 73,
+      "end": 74,
       "type": "HAS_INFO_FOR",
       "properties": {},
-      "elementId": "22",
-      "startNodeElementId": "22",
-      "endNodeElementId": "23"
+      "elementId": "102",
+      "startNodeElementId": "73",
+      "endNodeElementId": "74"
     },
     {
-      "identity": 24,
-      "start": 21,
-      "end": 24,
-      "type": "TALKS_ABOUT",
-      "properties": {},
-      "elementId": "24",
-      "startNodeElementId": "21",
-      "endNodeElementId": "24"
-    },
-    {
-      "identity": 23,
-      "start": 23,
-      "end": 24,
+      "identity": 104,
+      "start": 74,
+      "end": 75,
       "type": "KEEPS_NOW",
       "properties": {},
-      "elementId": "23",
-      "startNodeElementId": "23",
-      "endNodeElementId": "24"
+      "elementId": "104",
+      "startNodeElementId": "74",
+      "endNodeElementId": "75"
     },
     {
-      "identity": 26,
-      "start": 25,
-      "end": 20,
+      "identity": 103,
+      "start": 72,
+      "end": 75,
       "type": "TALKS_ABOUT",
       "properties": {},
-      "elementId": "26",
-      "startNodeElementId": "25",
-      "endNodeElementId": "20"
-    },
-    {
-      "identity": 25,
-      "start": 25,
-      "end": 17,
-      "type": "TALKS_ABOUT",
-      "properties": {},
-      "elementId": "25",
-      "startNodeElementId": "25",
-      "endNodeElementId": "17"
-    },
-    {
-      "identity": 27,
-      "start": 25,
-      "end": 26,
-      "type": "TALKS_ABOUT",
-      "properties": {},
-      "elementId": "27",
-      "startNodeElementId": "25",
-      "endNodeElementId": "26"
+      "elementId": "103",
+      "startNodeElementId": "72",
+      "endNodeElementId": "75"
     }
   ]
 }

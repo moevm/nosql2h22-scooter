@@ -10,10 +10,10 @@ const alert = require("alert");
 var uri = "bolt://localhost:7687"
 var user = "neo4j"
 var password = "0000"
-//const driver = neo4j.driver(uri, neo4j.auth.basic(user, password), { disableLosslessIntegers: true })
+const driver = neo4j.driver(uri, neo4j.auth.basic(user, password), { disableLosslessIntegers: true })
 
 var url = 'bolt://neo4j:7687';
-var driver = neo4j.driver(url, { disableLosslessIntegers: true });
+//var driver = neo4j.driver(url, { disableLosslessIntegers: true });
 
 session = driver.session()
 
@@ -434,15 +434,16 @@ router.get('/add_scooter', async (req, res) =>
 })
 
 async function addEditScooter(info){
+  //console.log(+info.number)
   let result = await session.run(
-      'MERGE (a:SCOOTER {number: $number}) <- [net:TALKS_ABOUT] - (tech:TECH_CARD)\n' +
+      'MERGE (a:SCOOTER {number: TOINTEGER($number)}) <- [net:TALKS_ABOUT] - (tech:TECH_CARD)\n' +
       'ON CREATE SET a.battery = 100, a.coordinate_x = 10, a.coordinate_y = 10, a.status = $status, ' +
       'tech.creationYear = $creation_year, tech.manufacturer = $manufacturer, tech.maxPowerCapacity = $max_power_cap, tech.mileage = $mileage\n' +
       'ON MATCH SET a.status = $status,' +
       'tech.mileage = $mileage\n' +
       'return a, net, tech',
-      {number: info.number, creation_year: info.creation_year, manufacturer: info.manufacturer,
-        max_power_cap: info.max_power_cap, mileage: info.mileage, status: info.status}
+      {number: parseInt(info.number), creation_year: +info.creation_year, manufacturer: info.manufacturer,
+        max_power_cap: info.max_power_cap, mileage: +info.mileage, status: info.status}
   )
   return result
 }

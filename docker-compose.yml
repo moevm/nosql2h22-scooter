@@ -5,12 +5,12 @@ services:
         environment:
           - NEO4J_AUTH=none
         volumes:
-          - "./exported/:home/node/app/src/exported"
+          - "./exported/:/home/node/app/src/exported"
 
     web:
         build: .
         volumes:
-          - "./exported/:home/node/app/src/exported"
+          - "./exported/:/home/node/app/src/exported"
         ports:
           - "13000:3000"
         depends_on:
