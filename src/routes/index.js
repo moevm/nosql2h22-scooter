@@ -10,10 +10,10 @@ const alert = require("alert");
 var uri = "bolt://localhost:7687"
 var user = "neo4j"
 var password = "0000"
-const driver = neo4j.driver(uri, neo4j.auth.basic(user, password), { disableLosslessIntegers: true })
+//const driver = neo4j.driver(uri, neo4j.auth.basic(user, password), { disableLosslessIntegers: true })
 
 var url = 'bolt://neo4j:7687';
-//var driver = neo4j.driver(url, { disableLosslessIntegers: true });
+var driver = neo4j.driver(url, { disableLosslessIntegers: true });
 
 session = driver.session()
 
