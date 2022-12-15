@@ -120,7 +120,7 @@
         "WAREHOUSE"
       ],
       "properties": {
-        "houseNumber": 1,
+        "address": "СПб, улица Мира, дом 1, помещение 1",
         "coordinate_x": 0,
         "coordinate_y": 0,
         "capacity": 12
@@ -490,7 +490,7 @@
         "WAREHOUSE"
       ],
       "properties": {
-        "houseNumber": 2,
+        "address": "СПб, улица Войны, дом 2, помещение 2",
         "coordinate_x": 7,
         "coordinate_y": -17,
         "capacity": 123
@@ -503,7 +503,7 @@
         "WAREHOUSE"
       ],
       "properties": {
-        "houseNumber": 3,
+        "address": "СПб, улица Пира, дом 3, помещение 3",
         "coordinate_x": 27,
         "coordinate_y": -78,
         "capacity": 34
@@ -516,7 +516,7 @@
         "WAREHOUSE"
       ],
       "properties": {
-        "houseNumber": 4,
+        "address": "СПб, улица Жира, дом 4, помещение 1",
         "coordinate_x": 67,
         "coordinate_y": -27,
         "capacity": 51
@@ -529,7 +529,7 @@
         "WAREHOUSE"
       ],
       "properties": {
-        "houseNumber": 5,
+        "address": "СПб, улица Тира, дом 1, помещение 1",
         "coordinate_x": 37,
         "coordinate_y": -37,
         "capacity": 34
